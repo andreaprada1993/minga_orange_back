@@ -1,6 +1,9 @@
 import 'dotenv/config.js';
 import '../../config/database.js';
 import Manga from '../Manga.js';
+import Chapter from '../Chapter.js';
+import Category from '../Category.js';
+import Author from '../Author.js';
 
 let mangas = [{
     title: "Alice in Borderland",
@@ -683,4 +686,21 @@ let mangas = [{
     }]
 }];
 
-Manga.insertMany(mangas)
+let insert_mangas_chapters = async () => {
+    for (const manga of mangas) {
+        let author = await Author.findOne({ name: manga.author_id });
+        manga.author_id = author._id;
+        let category = await Category.findOne({ name: manga.category_id });
+        manga.category_id = category._id;
+        let one = await Manga.create(manga);
+        console.log('id of ' + one.title + ': ' + one._id);
+        for (const chapter of manga.chapters) {
+            chapter.manga_id = one._id;
+            chapter.cover_photo = chapter.pages[0];
+            await Chapter.create(chapter);
+        }
+        console.log(one.title + ' & Chapter Created! ');
+    }
+    console.log('Done!');
+};
+insert_mangas_chapters()

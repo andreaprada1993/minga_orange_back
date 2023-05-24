@@ -1,7 +1,7 @@
 import { model, Types, Schema } from 'mongoose';
 
 const collection = 'categories';
-const categorySchema = new Schema({
+const schema = new Schema({
     name: { type: String, required: true },
     color: { type: String, required: true },
     hover: { type: String, required: true },
@@ -14,5 +14,5 @@ const categorySchema = new Schema({
     timestamps: true
 })
 
-const Category = model(collection, categorySchema);
+const Category = model(collection, schema);
 export default Category;
